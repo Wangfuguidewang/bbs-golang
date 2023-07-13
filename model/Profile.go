@@ -3,12 +3,14 @@ package model
 import "bbs-go/utils/errmsg"
 
 type Profile struct {
-	ID       uint   `gorm:"primarykey"`
-	Username string `gorm:"not null;comment:用户名"json:"username"`
-	Nickname string `gorm:"comment:昵称" json:"nickname"` // 昵称
-	Email    string `gorm:"comment:邮箱"json:"email"`     //邮箱
-	Bio      string `gorm:"comment:用户简介" json:"bio"`    // 用户简介
-	Avatar   string `gorm:"comment:个人头像" json:"avatar"` // 个人头像
+	ID             uint   `gorm:"primarykey"`
+	Username       string `gorm:"not null;comment:用户名"json:"username"`
+	Nickname       string `gorm:"comment:昵称" json:"nickname"`       // 昵称
+	Email          string `gorm:"comment:邮箱"json:"email"`           //邮箱
+	Bio            string `gorm:"comment:用户简介" json:"bio"`          // 用户简介
+	Avatar         string `gorm:"comment:个人头像" json:"avatar"`       // 个人头像
+	FollowersCount uint   `gorm:"default:0" json:"followers_count"` // 粉丝数量
+	FollowingCount uint   `gorm:"default:0" json:"following_count"` // 关注数量
 }
 
 // Getprofile 获取个人信息

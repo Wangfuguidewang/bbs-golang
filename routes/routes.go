@@ -30,6 +30,15 @@ func InitRouter() {
 		auth.DELETE("admin/delect/:id", user.DeleteTop) //删除话题
 		//评论模块
 		auth.POST("addcomment/:topicid", user.AddComment) //添加评论
+		//点赞
+		auth.POST("likeadd/:topicid", user.Liketopic)  //添加点赞
+		auth.DELETE("unlike/:topicid", user.Unliketop) //删除点赞
+		//收藏
+		auth.POST("favAdd/:topicid", user.FavotopAdd) //添加收藏
+		auth.DELETE("favDe/:topicid", user.DeFavoTop) //删除收藏
+		//关注粉丝
+		auth.POST("folladd/:follid", user.FansAdd) //添加关注 粉丝+1
+		auth.DELETE("Defool/:follid", user.Unfans) //取消关注 粉丝-1
 	}
 	router := r.Group("/api")
 	{

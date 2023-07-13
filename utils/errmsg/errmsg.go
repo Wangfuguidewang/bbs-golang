@@ -38,7 +38,7 @@ var Codemsg = map[int]string{
 	ERROR_USER_NO_RIGHT:    "权限不足",
 	ERROR_EMAIL_USED:       "邮箱已存在",
 	//文章
-	ERROR_ART_NOT_EXIST: "文章不存在",
+	ERROR_ART_NOT_EXIST: "话题不存在",
 	//分类
 
 	ERROR_CATENAME_USED:  "分类已存在",

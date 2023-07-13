@@ -33,7 +33,7 @@ func Initdb() {
 		return
 	}
 	fmt.Println("连接成功")
-	db.AutoMigrate(&User{}, &Profile{}, &Topic{}, &Comment{}, &Like{}, &Favorite{})
+	db.AutoMigrate(&User{}, &Profile{}, &Topic{}, &Comment{}, &Like{}, &Favorite{}, &Follower{}, &Follow{})
 	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
 	sqlDB, _ := db.DB()
 

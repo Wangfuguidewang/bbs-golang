@@ -96,3 +96,45 @@ func DeleteTop(c *gin.Context) {
 		"message": errmsg.GetErrMsg(code),
 	})
 }
+
+// 点赞
+func Liketopic(c *gin.Context) {
+	userid := c.GetUint("userid")
+	topicid, _ := strconv.Atoi(c.Param("topicid"))
+	code := model.LikeTopic(uint(topicid), userid)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
+func Unliketop(c *gin.Context) {
+	userid := c.GetUint("userid")
+	topicid, _ := strconv.Atoi(c.Param("topicid"))
+	code := model.Unliketop(uint(topicid), userid)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
+
+// 添加啊收藏
+func FavotopAdd(c *gin.Context) {
+	userid := c.GetUint("userid")
+	topicid, _ := strconv.Atoi(c.Param("topicid"))
+	code := model.FavoriTopADD(uint(topicid), userid)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
+
+// 删除收藏
+func DeFavoTop(c *gin.Context) {
+	userid := c.GetUint("userid")
+	topicid, _ := strconv.Atoi(c.Param("topicid"))
+	code := model.DeFavoTop(uint(topicid), userid)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
