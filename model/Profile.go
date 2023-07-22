@@ -20,7 +20,7 @@ func Getprofile(id int) (Profile, int) {
 	if err != nil {
 		return profile, errmsg.ERROR
 	}
-	return profile, errmsg.SUCCSE
+	return profile, errmsg.SUCCESS
 }
 
 //updateProfile 更新个人信息
@@ -32,11 +32,11 @@ func UpdateProfile(id int, data *Profile) int {
 	if err != nil {
 		return errmsg.ERROR
 	}
-	user.Username = data.Username
+	user.UserName = data.Username
 	user.Email = data.Email
 	err = db.Model(&user).Where("ID = ?", id).Updates(&user).Error
 	if err != nil {
 		return errmsg.ERROR
 	}
-	return errmsg.SUCCSE
+	return errmsg.SUCCESS
 }

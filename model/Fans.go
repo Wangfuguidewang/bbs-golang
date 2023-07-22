@@ -76,7 +76,7 @@ func FollwAdd(follid, userid uint) int {
 	if err != nil {
 		return errmsg.ERROR
 	}
-	return errmsg.SUCCSE
+	return errmsg.SUCCESS
 }
 
 // 取消关注
@@ -103,5 +103,5 @@ func UnFollw(follid, userid uint) int {
 	if err = db.Model(&Profile{}).Where("id = ?", follid).UpdateColumn("followers_count", gorm.Expr("followers_count - ?", 1)).Error; err != nil {
 		return errmsg.ERROR
 	}
-	return errmsg.SUCCSE
+	return errmsg.SUCCESS
 }

@@ -36,7 +36,7 @@ func SetToken(userid uint, password string) (string, int) {
 	if err != nil {
 		return "", errmsg.ERROR
 	}
-	return token, errmsg.SUCCSE
+	return token, errmsg.SUCCESS
 }
 
 // 验证token
@@ -45,7 +45,7 @@ func CheckToken(token string) (*MyClaims, int) {
 		return JwKey, nil
 	})
 	if key, _ := settoken.Claims.(*MyClaims); settoken.Valid {
-		return key, errmsg.SUCCSE
+		return key, errmsg.SUCCESS
 	} else {
 		return nil, errmsg.ERROR
 	}
@@ -55,7 +55,7 @@ func CheckToken(token string) (*MyClaims, int) {
 func JwtToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenHerder := c.Request.Header.Get("Authorization")
-		code := errmsg.SUCCSE
+		code := errmsg.SUCCESS
 		if tokenHerder == "" {
 			code = errmsg.ERROR_TOKEN_EXIST
 			c.JSON(http.StatusOK, gin.H{

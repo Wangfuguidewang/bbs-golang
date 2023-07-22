@@ -138,3 +138,24 @@ func DeFavoTop(c *gin.Context) {
 		"message": errmsg.GetErrMsg(code),
 	})
 }
+func FavoUser(c *gin.Context) {
+	userid := c.GetUint("userid")
+	code, data := model.Favouser(userid)
+	c.JSON(http.StatusOK, gin.H{
+		"code":    code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
+
+// 话题列表
+func GetTop(c *gin.Context) {
+
+	code, data := model.Top()
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":    code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}

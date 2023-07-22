@@ -20,6 +20,6 @@ func AddComment(data *Comment) int {
 	if err != nil {
 		return errmsg.ERROR
 	}
-	return errmsg.SUCCSE
+	return errmsg.SUCCESS
 
 }

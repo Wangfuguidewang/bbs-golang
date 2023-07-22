@@ -3,6 +3,7 @@ package model
 import (
 	"bbs-go/utils/errmsg"
 	"encoding/base64"
+	"fmt"
 	"golang.org/x/crypto/scrypt"
 	"gorm.io/gorm"
 	"log"
@@ -13,11 +14,13 @@ var Instance *Config
 
 type User struct {
 	gorm.Model
-	Username      string    `gorm:"not null;comment:用户名"json:"username"`
+	UserName      string    `gorm:"not null;comment:用户名"json:"username"`
 	Password      string    `gorm:"not null;comment:密码"json:"password"`
 	Email         string    `gorm:"not null;comment:邮箱"json:"email"`
 	LastLoginTime time.Time `gorm:"comment:最后登录时间" json:"last_login_time"` // 最后登录时间
 	Role          int       `gorm:"type:int;comment:权限等级" json:"role"`     //0 代表管理员 1 待变普通用户
+	Points        int       `gorm:"column:points;not null" json:"points"`  // 积分字段
+	Code          string
 	//Nickname      string    `gorm:"comment:昵称" json:"nickname"`            // 昵称
 	//Bio           string    `gorm:"comment:用户简介" json:"bio"`               // 用户简介
 	//Avatar        string    `gorm:"comment:个人头像" json:"avatar"`            // 个人头像
@@ -51,7 +54,7 @@ func CheckUser(username, email string) int {
 	if users.ID > 0 {
 		return errmsg.ERROR_EMAIL_USED
 	}
-	return errmsg.SUCCSE //可用
+	return errmsg.SUCCESS //可用
 }
 func CheckUserid(username string) (int, uint) {
 	var users User
@@ -62,7 +65,7 @@ func CheckUserid(username string) (int, uint) {
 		return errmsg.ERROR_USERNAME_USED, 0 //1001
 	}
 
-	return errmsg.SUCCSE, users.ID //可用
+	return errmsg.SUCCESS, users.ID //可用
 }
 func Checkenail(email string) (int, string) {
 	var user User
@@ -73,7 +76,7 @@ func Checkenail(email string) (int, string) {
 		return errmsg.ERROR_USERNAME_USED, "" //1001
 	}
 
-	return errmsg.SUCCSE, user.Email //可用
+	return errmsg.SUCCESS, user.Email //可用
 }
 
 // 根据id查询用户是否存在
@@ -107,38 +110,48 @@ func ScryptPw(password string) string {
 
 // 新增用户
 func CreateUser(data *User) int {
+	if data.Email == "" {
+		return errmsg.ERROR_EMAIL_NIL
+	}
+	if data.UserName == "" {
+		return errmsg.ERROR
+	}
 	//密码写入数据库前进行哈希加密
 	data.Password = ScryptPw(data.Password)
 	//data.BeforeSave()
-	var profile Profile
+
 	err := db.Create(&data).Error
 	if err != nil {
+		fmt.Println(err)
 		return errmsg.ERROR
 	}
-	profile.Username = data.Username
+
+	var profile Profile
+	profile.Username = data.UserName
 	profile.Email = data.Email
 	err = db.Create(&profile).Error
 	if err != nil && data.ID != profile.ID {
 		return errmsg.ERROR
 	}
-	return errmsg.SUCCSE
+	return errmsg.SUCCESS
 }
 
 // 登陆验证
-func CheckLOgin(username string, password string) int {
+func CheckLogin(username string, password string) (int, *User) {
 	var user User
-	var un = username
-	db.Where("username = ?", un).First(&user)
-	db.Where("email = ?", un).First(&user)
-	if user.ID == 0 {
-		return errmsg.ERROR_USER_NOT_EXIST
 
+	db.Where("user_name = ?", username).First(&user)
+	if user.ID == 0 {
+		db.Where("email = ?", username).First(&user)
+	}
+	if user.ID == 0 {
+		return errmsg.ERROR_USER_NOT_EXIST, nil
 	}
 	if ScryptPw(password) != user.Password {
-		return errmsg.ERROR_PASSWORD_WEONG
+		return errmsg.ERROR_PASSWORD_WEONG, nil
 	}
 	if user.Role != 0 {
-		return errmsg.ERROR_USER_NO_RIGHT
+		return errmsg.ERROR_USER_NO_RIGHT, nil
 	}
-	return errmsg.SUCCSE
+	return errmsg.SUCCESS, &user
 }

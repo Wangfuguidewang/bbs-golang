@@ -1,8 +1,8 @@
 package errmsg
 
 const (
-	SUCCSE = 200
-	ERROR  = 500
+	SUCCESS = 200
+	ERROR   = 500
 	//1000到1999用户模块
 	ERROR_USERNAME_USED    = 1001
 	ERROR_EMAIL_USED       = 1010
@@ -14,6 +14,8 @@ const (
 	ERROR_TOKEN_TYPE_WRONG = 1007
 	ERROR_USER_EDIT        = 1008
 	ERROR_USER_NO_RIGHT    = 1009
+	ERROR_EMAIL_NIL        = 1011
+	ERROR_EMAIL_NO         = 1012
 
 	//2000-2999文章模块错误
 
@@ -24,8 +26,8 @@ const (
 )
 
 var Codemsg = map[int]string{
-	SUCCSE: "ok",
-	ERROR:  "fail",
+	SUCCESS: "ok",
+	ERROR:   "fail",
 	//用户
 	ERROR_USERNAME_USED:    "用户已存在",
 	ERROR_PASSWORD_WEONG:   "密码错误",
@@ -37,6 +39,8 @@ var Codemsg = map[int]string{
 	ERROR_USER_EDIT:        "修改成功",
 	ERROR_USER_NO_RIGHT:    "权限不足",
 	ERROR_EMAIL_USED:       "邮箱已存在",
+	ERROR_EMAIL_NIL:        "邮箱为空",
+	ERROR_EMAIL_NO:         "发送验证码失败",
 	//文章
 	ERROR_ART_NOT_EXIST: "话题不存在",
 	//分类

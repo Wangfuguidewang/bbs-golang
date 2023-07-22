@@ -26,3 +26,7 @@ func Unfans(c *gin.Context) {
 		"message": errmsg.GetErrMsg(code),
 	})
 }
+
+//用户的关注列表
+
+//用户粉丝列表

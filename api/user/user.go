@@ -11,6 +11,7 @@ import (
 )
 
 var code int
+var verificationCodes string
 
 // 添加用户
 func AddUser(c *gin.Context) {
@@ -20,14 +21,12 @@ func AddUser(c *gin.Context) {
 		fmt.Println(data)
 		return
 	}
-	code = model.CheckUser(data.Username, data.Email)
-	if code == errmsg.SUCCSE {
+	code = model.CheckUser(data.UserName, data.Email)
+
+	if code == errmsg.SUCCESS {
 		//返回值正确 表示没有用户 则可添加
 		data.LastLoginTime = time.Now()
-		model.CreateUser(&data)
-	}
-	if code == errmsg.ERROR_USERNAME_USED {
-		code = errmsg.ERROR_USERNAME_USED
+		code = model.CreateUser(&data)
 
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -42,22 +41,16 @@ func AddUser(c *gin.Context) {
 func Login(c *gin.Context) {
 	var data model.User
 	var token string
-	var code int
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		fmt.Println("err ==", err)
 		return
 	}
-	code = model.CheckLOgin(data.Username, data.Password)
+	code, userInfo := model.CheckLogin(data.UserName, data.Password)
 
-	if code == errmsg.SUCCSE {
-		code, userid := model.CheckUserid(data.Username)
-		if code == 1001 {
-			fmt.Println("code ==", code)
-			return
-		}
+	if code == errmsg.SUCCESS {
 		data.LastLoginTime = time.Now()
-		token, code = middleware.SetToken(userid, data.Password)
+		token, code = middleware.SetToken(userInfo.ID, data.Password)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -65,4 +58,12 @@ func Login(c *gin.Context) {
 		"message": errmsg.GetErrMsg(code),
 		"token":   token,
 	})
+}
+
+// 邮箱验证接口
+func verifyEmailHandler(c *gin.Context) {
+	// 获取用户提交的验证码
+	code := c.PostForm("code")
+
+	fmt.Println(code)
 }

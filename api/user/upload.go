@@ -10,11 +10,11 @@ import (
 func UpLoad(c *gin.Context) {
 	id := c.GetUint("userid")
 	var profile model.Profile
-	file, flileHeader, _ := c.Request.FormFile("file")
-	fileSize := flileHeader.Size
+	file, fileHeader, _ := c.Request.FormFile("file")
+	fileSize := fileHeader.Size
 	url, code := model.UpLoadFile(file, fileSize)
 	profile.Avatar = url
-	if code == errmsg.SUCCSE {
+	if code == errmsg.SUCCESS {
 		code = model.UpdateProfile(int(id), &profile)
 	}
 
